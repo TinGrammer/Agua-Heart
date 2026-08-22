@@ -35,7 +35,7 @@ function getWeeklySalesData($conn) {
 }
 
 function getMonthlySalesData($conn) {
-    $r = $conn->query("SELECT MONTHNAME(date_ordered) as month, SUM(CASE WHEN gallon_type='Slim' THEN quantity*" . PRICE_SLIM . " ELSE quantity*" . PRICE_ROUND . " END) as sales FROM orders WHERE YEAR(date_ordered)=YEAR(CURDATE()) AND status!='Cancelled' GROUP BY MONTH(date_ordered) ORDER BY MONTH(date_ordered)");
+    $r = $conn->query("SELECT MONTHNAME(MIN(date_ordered)) as month, SUM(CASE WHEN gallon_type='Slim' THEN quantity*" . PRICE_SLIM . " ELSE quantity*" . PRICE_ROUND . " END) as sales FROM orders WHERE YEAR(date_ordered)=YEAR(CURDATE()) AND status!='Cancelled' GROUP BY MONTH(date_ordered) ORDER BY MONTH(date_ordered)");
     $data = [];
     while ($row = $r->fetch_assoc()) $data[] = $row;
     return $data;

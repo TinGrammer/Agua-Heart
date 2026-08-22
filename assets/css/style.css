@@ -336,6 +336,14 @@ section { padding: 80px 5%; }
     overflow: hidden;
 }
 
+.product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+}
+
 .product-img::after {
     content: '';
     position: absolute;

@@ -28,7 +28,7 @@ $date = date('Y-m-d');
 $time = date('H:i:s');
 
 $stmt = $conn->prepare("INSERT INTO orders (order_number, customer_name, contact_number, location, gallon_type, quantity, notes, date_ordered, time_ordered) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param('sssssiss', $order_number, $name, $phone, $loc, $type, $qty, $notes, $date, $time);
+$stmt->bind_param('sssssisss', $order_number, $name, $phone, $loc, $type, $qty, $notes, $date, $time);
 
 if ($stmt->execute()) {
     echo json_encode(['success' => true, 'order_number' => $order_number, 'name' => $name]);

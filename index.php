@@ -41,7 +41,6 @@
         <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
     </div>
     <div class="hero-content">
-        <div class="hero-badge">🏆 #1 Mineral Water Delivery</div>
         <h1>Agua <span>Heart</span><br>Water refilling Station</h1>
         <p>Pure heart in every drop — fresh, clean mineral water delivered straight to your door. Fast, reliable, and affordable.</p>
         <div class="hero-btns">
@@ -91,7 +90,9 @@
     </div>
     <div class="products-grid">
         <div class="product-card fade-in">
-            <div class="product-img">🫙</div>
+            <div class="product-img">
+                <img src="slim.jpg" alt="Slim gallon container">
+            </div>
             <div class="product-info">
                 <h3>Slim Gallon</h3>
                 <p>Perfect for small households or personal use. Lightweight and easy to handle.</p>
@@ -100,7 +101,9 @@
             </div>
         </div>
         <div class="product-card fade-in">
-            <div class="product-img">🪣</div>
+            <div class="product-img">
+                <img src="ROUND.jpg" alt="Round gallon container">
+            </div>
             <div class="product-info">
                 <h3>Round Gallon</h3>
                 <p>Ideal for families and offices. Standard size with more water per gallon.</p>

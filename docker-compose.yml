@@ -1,0 +1,23 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: agua_heart
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./agua_heart.sql:/docker-entrypoint-initdb.d/agua_heart.sql
+
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASS: ""
+      DB_NAME: agua_heart
+    depends_on:
+      - mysql
