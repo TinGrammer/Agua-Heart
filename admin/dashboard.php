@@ -22,6 +22,7 @@ while ($r = $typeRes->fetch_assoc()) {
 
 // Recent orders
 $recent = $conn->query("SELECT * FROM orders ORDER BY created_at DESC LIMIT 8");
+$inactiveCustomers = getInactiveCustomers($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -190,10 +191,11 @@ $recent = $conn->query("SELECT * FROM orders ORDER BY created_at DESC LIMIT 8");
                         </thead>
                         <tbody>
                         <?php while ($row = $recent->fetch_assoc()): ?>
+                            <?php $isInactive = isset($inactiveCustomers[$row['customer_name']]); ?>
                             <tr>
                                 <td><strong><?= htmlspecialchars($row['order_number']) ?></strong></td>
                                 <td>
-                                    <div><?= htmlspecialchars($row['customer_name']) ?></div>
+                                    <div style="<?= $isInactive ? 'color:#dc3545;font-weight:600' : '' ?>"><?= htmlspecialchars($row['customer_name']) ?></div>
                                     <small style="color:#6c757d"><?= htmlspecialchars($row['contact_number']) ?></small>
                                 </td>
                                 <td><?= htmlspecialchars(substr($row['location'], 0, 30)) ?>...</td>

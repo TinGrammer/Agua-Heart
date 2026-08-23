@@ -45,6 +45,7 @@ $allTypes = $types . 'ii';
 $stmt->bind_param($allTypes, ...$allParams);
 $stmt->execute();
 $orders = $stmt->get_result();
+$inactiveCustomers = getInactiveCustomers($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -152,10 +153,13 @@ $orders = $stmt->get_result();
                         <?php while ($row = $orders->fetch_assoc()):
                             $price = $row['gallon_type'] === 'Slim' ? PRICE_SLIM : PRICE_ROUND;
                             $amount = $price * $row['quantity'];
+                            $isInactive = isset($inactiveCustomers[$row['customer_name']]);
                         ?>
                             <tr>
                                 <td><strong style="color:#0077b6"><?= htmlspecialchars($row['order_number']) ?></strong></td>
-                                <td><?= htmlspecialchars($row['customer_name']) ?></td>
+                                <td>
+                                    <div style="<?= $isInactive ? 'color:#dc3545;font-weight:700' : '' ?>"><?= htmlspecialchars($row['customer_name']) ?></div>
+                                </td>
                                 <td><?= htmlspecialchars($row['contact_number']) ?></td>
                                 <td style="max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="<?= htmlspecialchars($row['location']) ?>"><?= htmlspecialchars($row['location']) ?></td>
                                 <td><span class="badge badge-<?= strtolower($row['gallon_type']) ?>"><?= $row['gallon_type'] ?></span></td>

@@ -564,34 +564,31 @@ footer p { font-size: 0.9rem; }
 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-.gallon-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.gallon-mixed-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-.gallon-option { position: relative; }
-
-.gallon-option input[type="radio"] { position: absolute; opacity: 0; }
-
-.gallon-label {
+.gallon-mixed-card {
+    background: #f3fbff;
+    border: 2px solid #d9eefc;
+    border-radius: 12px;
+    padding: 18px 16px;
     display: flex;
     flex-direction: column;
+    gap: 16px;
+}
+
+.gallon-mixed-header {
+    display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 20px 15px;
-    border: 2px solid #e8f4fd;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: var(--transition);
-    text-align: center;
+    gap: 12px;
 }
 
-.gallon-label:hover { border-color: var(--primary-light); }
-
-.gallon-option input:checked + .gallon-label {
-    border-color: var(--primary);
-    background: var(--light);
-    box-shadow: 0 0 0 4px rgba(0,119,182,0.1);
+.gallon-image {
+    width: 78px;
+    height: 78px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 8px 14px rgba(0,119,182,0.12));
 }
-
-.gallon-emoji { font-size: 2.5rem; }
 .gallon-name { font-weight: 700; font-size: 0.95rem; }
 .gallon-price { font-size: 0.8rem; color: var(--primary); font-weight: 600; }
 

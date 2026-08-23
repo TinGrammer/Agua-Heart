@@ -66,32 +66,36 @@
 
                 <div class="form-group">
                     <label>Type of Gallon <span>*</span></label>
-                    <div class="gallon-options">
-                        <div class="gallon-option">
-                            <input type="radio" name="gallon_type" id="slim" value="Slim" checked>
-                            <label class="gallon-label" for="slim">
-                                <span class="gallon-emoji">🫙</span>
-                                <span class="gallon-name">Slim</span>
-                                <span class="gallon-price">₱25 / gallon</span>
-                            </label>
+                    <div class="gallon-mixed-options">
+                        <div class="gallon-mixed-card">
+                            <div class="gallon-mixed-header">
+                                <img src="slim.jpg" alt="Slim gallon" class="gallon-image">
+                                <div>
+                                    <div class="gallon-name">Slim</div>
+                                    <div class="gallon-price">₱25 / gallon</div>
+                                </div>
+                            </div>
+                            <div class="qty-control">
+                                <button type="button" class="qty-btn" data-target="slim_quantity" data-step="-1">−</button>
+                                <input type="number" id="slim_quantity" name="slim_quantity" class="qty-input" value="0" min="0" max="99">
+                                <button type="button" class="qty-btn" data-target="slim_quantity" data-step="1">+</button>
+                            </div>
                         </div>
-                        <div class="gallon-option">
-                            <input type="radio" name="gallon_type" id="round" value="Round">
-                            <label class="gallon-label" for="round">
-                                <span class="gallon-emoji">🪣</span>
-                                <span class="gallon-name">Round</span>
-                                <span class="gallon-price">₱30 / gallon</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label>Number of Gallons <span>*</span></label>
-                    <div class="qty-control">
-                        <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
-                        <input type="number" id="quantity" name="quantity" class="qty-input" value="1" min="1" max="99">
-                        <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                        <div class="gallon-mixed-card">
+                            <div class="gallon-mixed-header">
+                                <img src="ROUND.jpg" alt="Round gallon" class="gallon-image">
+                                <div>
+                                    <div class="gallon-name">Round</div>
+                                    <div class="gallon-price">₱30 / gallon</div>
+                                </div>
+                            </div>
+                            <div class="qty-control">
+                                <button type="button" class="qty-btn" data-target="round_quantity" data-step="-1">−</button>
+                                <input type="number" id="round_quantity" name="round_quantity" class="qty-input" value="0" min="0" max="99">
+                                <button type="button" class="qty-btn" data-target="round_quantity" data-step="1">+</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -104,20 +108,16 @@
                 <!-- Order Summary -->
                 <div class="order-summary">
                     <div class="summary-row">
-                        <span>Gallon Type</span>
-                        <span id="sumType">Slim Gallon</span>
+                        <span>Slim</span>
+                        <span id="sumSlimQty">0 items</span>
                     </div>
                     <div class="summary-row">
-                        <span>Quantity</span>
-                        <span id="sumQty">1</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Price</span>
-                        <span id="sumPrice">₱25 each</span>
+                        <span>Round</span>
+                        <span id="sumRoundQty">0 items</span>
                     </div>
                     <div class="summary-row total">
                         <span>Total Amount</span>
-                        <span id="sumTotal">₱25</span>
+                        <span id="sumTotal">₱0</span>
                     </div>
                 </div>
 
@@ -145,7 +145,7 @@
     </div>
 </div>
 
-<script src="assets/js/main.js"></script>
-<script src="assets/js/order.js"></script>
+<script src="assets/js/main.js?v=3"></script>
+<script src="assets/js/order.js?v=3"></script>
 </body>
 </html>

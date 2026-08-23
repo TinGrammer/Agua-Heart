@@ -1,41 +1,49 @@
 const PRICES = { Slim: 25, Round: 30 };
 
-function updateSummary() {
-    const type = document.querySelector('input[name="gallon_type"]:checked')?.value || 'Slim';
-    const qty = parseInt(document.getElementById('quantity').value) || 1;
-    const price = PRICES[type];
-    const total = price * qty;
-
-    document.getElementById('sumType').textContent = type + ' Gallon';
-    document.getElementById('sumQty').textContent = qty;
-    document.getElementById('sumPrice').textContent = '₱' + price + ' each';
-    document.getElementById('sumTotal').textContent = '₱' + total.toLocaleString();
+function getQtyValue(id) {
+    const value = parseInt(document.getElementById(id).value) || 0;
+    return Math.max(0, Math.min(99, value));
 }
 
-function changeQty(delta) {
-    const input = document.getElementById('quantity');
-    let val = parseInt(input.value) + delta;
-    if (val < 1) val = 1;
-    if (val > 99) val = 99;
-    input.value = val;
-    updateSummary();
+function updateSummary() {
+    const slimQty = getQtyValue('slim_quantity');
+    const roundQty = getQtyValue('round_quantity');
+    const slimTotal = slimQty * PRICES.Slim;
+    const roundTotal = roundQty * PRICES.Round;
+    const total = slimTotal + roundTotal;
+
+    document.getElementById('sumSlimQty').textContent = slimQty ? slimQty + ' items • ₱' + slimTotal.toLocaleString() : '0 items';
+    document.getElementById('sumRoundQty').textContent = roundQty ? roundQty + ' items • ₱' + roundTotal.toLocaleString() : '0 items';
+    document.getElementById('sumTotal').textContent = '₱' + total.toLocaleString();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     updateSummary();
 
-    document.querySelectorAll('input[name="gallon_type"]').forEach(r => {
-        r.addEventListener('change', updateSummary);
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.target;
+            const input = document.getElementById(target);
+            const step = Number(btn.dataset.step) || 0;
+            let value = getQtyValue(target) + step;
+            if (value < 0) value = 0;
+            if (value > 99) value = 99;
+            input.value = value;
+            updateSummary();
+        });
     });
 
-    document.getElementById('quantity').addEventListener('input', () => {
-        let v = parseInt(document.getElementById('quantity').value);
-        if (isNaN(v) || v < 1) document.getElementById('quantity').value = 1;
-        if (v > 99) document.getElementById('quantity').value = 99;
-        updateSummary();
+    ['slim_quantity', 'round_quantity'].forEach(id => {
+        const input = document.getElementById(id);
+        input.addEventListener('input', () => {
+            let v = parseInt(input.value) || 0;
+            if (v < 0) v = 0;
+            if (v > 99) v = 99;
+            input.value = v;
+            updateSummary();
+        });
     });
 
-    // Form submission
     document.getElementById('orderForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
@@ -80,6 +88,13 @@ function validateForm() {
             el.classList.remove('error');
         }
     });
+
+    const slimQty = getQtyValue('slim_quantity');
+    const roundQty = getQtyValue('round_quantity');
+    if (slimQty === 0 && roundQty === 0) {
+        alert('Please choose at least one gallon quantity.');
+        valid = false;
+    }
 
     const phone = document.getElementById('contact_number').value.trim();
     if (phone && !/^[0-9+\-\s()]{7,15}$/.test(phone)) {

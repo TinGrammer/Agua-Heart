@@ -74,4 +74,4 @@ const counterObserver = new IntersectionObserver((entries) => {
     });
 }, { threshold: 0.5 });
 
-document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+document.querySelectorAll('.num[data-target]').forEach(el => counterObserver.observe(el));

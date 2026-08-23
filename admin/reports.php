@@ -53,6 +53,7 @@ $summary = $conn->query("SELECT COUNT(*) as orders, SUM(quantity) as gallons, SU
 
 // Orders list
 $orders = $conn->query("SELECT * FROM orders WHERE $dateCondition ORDER BY date_ordered DESC, time_ordered DESC");
+$inactiveCustomers = getInactiveCustomers($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -211,11 +212,12 @@ $orders = $conn->query("SELECT * FROM orders WHERE $dateCondition ORDER BY date_
                             $price = $row['gallon_type'] === 'Slim' ? PRICE_SLIM : PRICE_ROUND;
                             $amount = $price * $row['quantity'];
                             $totalAmt += $amount;
+                            $isInactive = isset($inactiveCustomers[$row['customer_name']]);
                         ?>
                             <tr>
                                 <td style="color:#6c757d"><?= $i++ ?></td>
                                 <td><strong style="color:#0077b6"><?= htmlspecialchars($row['order_number']) ?></strong></td>
-                                <td><?= htmlspecialchars($row['customer_name']) ?></td>
+                                <td style="<?= $isInactive ? 'color:#dc3545;font-weight:600' : '' ?>"><?= htmlspecialchars($row['customer_name']) ?></td>
                                 <td><?= htmlspecialchars($row['contact_number']) ?></td>
                                 <td style="max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><?= htmlspecialchars($row['location']) ?></td>
                                 <td><span class="badge badge-<?= strtolower($row['gallon_type']) ?>"><?= $row['gallon_type'] ?></span></td>

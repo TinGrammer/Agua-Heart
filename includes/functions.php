@@ -48,6 +48,15 @@ function getDailyOrdersData($conn) {
     return $data;
 }
 
+function getInactiveCustomers($conn) {
+    $r = $conn->query("SELECT customer_name FROM orders WHERE status != 'Cancelled' GROUP BY customer_name HAVING MAX(date_ordered) <= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)");
+    $inactive = [];
+    while ($row = $r->fetch_assoc()) {
+        $inactive[$row['customer_name']] = true;
+    }
+    return $inactive;
+}
+
 function sanitize($conn, $val) {
     return $conn->real_escape_string(trim($val));
 }

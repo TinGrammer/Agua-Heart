@@ -6,7 +6,7 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: agua_heart
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./agua_heart.sql:/docker-entrypoint-initdb.d/agua_heart.sql
 
