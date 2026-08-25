@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build web image
+        run: docker compose build web
+
+      - name: Start containers
+        run: docker compose up -d
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..15}; do
+            docker compose exec -T mysql mysqladmin ping -h localhost --silent && break
+            echo "Waiting for MySQL..."
+            sleep 3
+          done
+
+      - name: Show running containers
+        run: docker compose ps
+
+      - name: Show logs (for debugging)
+        if: always()
+        run: docker compose logs
+
+      - name: Tear down
+        if: always()
+        run: docker compose down
