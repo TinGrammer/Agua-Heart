@@ -66,10 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit" class="btn-login">Sign In →</button>
         </form>
-
-        <p style="text-align:center;margin-top:20px;font-size:0.82rem;color:#6c757d">
-            Default: <strong>admin</strong> / <strong>admin123</strong>
-        </p>
         <p style="text-align:center;margin-top:10px;font-size:0.82rem">
             <a href="../index.php" style="color:#0077b6;text-decoration:none">← Back to Website</a>
         </p>
