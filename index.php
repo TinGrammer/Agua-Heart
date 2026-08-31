@@ -40,12 +40,17 @@
         <div class="bubble"></div><div class="bubble"></div>
         <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
     </div>
-    <div class="hero-content">
-        <h1>Agua <span>Heart</span><br>Water refilling Station</h1>
-        <p>Pure heart in every drop — fresh, clean mineral water delivered straight to your door. Fast, reliable, and affordable.</p>
-        <div class="hero-btns">
-            <a href="order.php" class="btn btn-primary">🛒 Order Now</a>
-            <a href="#about" class="btn btn-outline">Learn More</a>
+    <div class="hero-wrapper">
+        <div class="hero-content">
+            <h1>Agua <span>Heart</span><br>Water refilling Station</h1>
+            <p>Pure heart in every drop — fresh, clean mineral water delivered straight to your door. Fast, reliable, and affordable.</p>
+            <div class="hero-btns">
+                <a href="order.php" class="btn btn-primary">🛒 Order Now</a>
+                <a href="#about" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+        <div class="hero-circle">
+            <img src="agua heart main picture.jfif" alt="Agua Heart - Water refilling station main image">
         </div>
     </div>
 </section>
