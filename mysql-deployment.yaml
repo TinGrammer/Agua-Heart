@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agua-heart-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agua-heart-mysql
+  template:
+    metadata:
+      labels:
+        app: agua-heart-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: ""
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+            - name: MYSQL_DATABASE
+              value: "agua_heart"
+          ports:
+            - containerPort: 3306

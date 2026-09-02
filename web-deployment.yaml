@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agua-heart-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agua-heart-web
+  template:
+    metadata:
+      labels:
+        app: agua-heart-web
+    spec:
+      containers:
+        - name: web
+          image: agua-heart-web:latest
+          env:
+            - name: DB_HOST
+              value: "agua-heart-mysql-service"
+            - name: DB_USER
+              value: "root"
+            - name: DB_PASS
+              value: ""
+            - name: DB_NAME
+              value: "agua_heart"
+          ports:
+            - containerPort: 80
