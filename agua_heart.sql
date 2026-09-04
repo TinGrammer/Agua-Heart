@@ -24,8 +24,9 @@ CREATE TABLE IF NOT EXISTS admins (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Default admin: username=admin, password=admin123
-INSERT INTO admins (username, password) VALUES ('admin', '$2y$10$Q.0ZhVv0Ti/zDjXJqlJ.ru5Ux/nEYu1eBKXWZd218lwPQOZp.YaPG');
+-- Default admin: username=admin, password=erdie_manaay1728
+INSERT INTO admins (username, password) VALUES ('admin', '$2y$10$P5Fnl7e5jKYHagaAqhYkle/YiWJz8NPyL1xrQrYbJEv.PmEWdeYdC')
+ON DUPLICATE KEY UPDATE password = VALUES(password);
 
 -- Sample orders
 INSERT INTO orders (order_number, customer_name, contact_number, location, gallon_type, quantity, notes, status, date_ordered, time_ordered) VALUES

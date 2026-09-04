@@ -8,6 +8,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
+      - mysql_data:/var/lib/mysql
       - ./agua_heart.sql:/docker-entrypoint-initdb.d/agua_heart.sql
 
   web:
@@ -21,3 +22,6 @@ services:
       DB_NAME: agua_heart
     depends_on:
       - mysql
+
+volumes:
+  mysql_data:
