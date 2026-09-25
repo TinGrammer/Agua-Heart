@@ -50,14 +50,15 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="contact_number">Contact Number <span>*</span></label>
+                           <label for="contact_number">Contact Number (Optional)</label>
                         <input type="tel" id="contact_number" name="contact_number" class="form-control"
-                               placeholder="e.g. 09171234567" autocomplete="tel">
+                               placeholder="09XXXXXXXXX" autocomplete="tel">
                     </div>
                     <div class="form-group">
                         <label for="location">Address / Location <span>*</span></label>
                         <input type="text" id="location" name="location" class="form-control"
                                placeholder="Street, Barangay, City" autocomplete="street-address">
+                        <div id="locationMessage" class="location-message" role="alert"></div>
                     </div>
                 </div>
 
@@ -72,7 +73,6 @@
                                 <img src="slim.jpg" alt="Slim gallon" class="gallon-image">
                                 <div>
                                     <div class="gallon-name">Slim</div>
-                                    <div class="gallon-price">₱25 / gallon</div>
                                 </div>
                             </div>
                             <div class="qty-control">
@@ -87,7 +87,6 @@
                                 <img src="ROUND.jpg" alt="Round gallon" class="gallon-image">
                                 <div>
                                     <div class="gallon-name">Round</div>
-                                    <div class="gallon-price">₱30 / gallon</div>
                                 </div>
                             </div>
                             <div class="qty-control">

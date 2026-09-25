@@ -10,14 +10,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $name    = sanitize($conn, $_POST['customer_name'] ?? '');
 $phone   = sanitize($conn, $_POST['contact_number'] ?? '');
+$phone   = $phone !== '' ? $phone : null;
 $loc     = sanitize($conn, $_POST['location'] ?? '');
 $slimQty = max(0, (int)($_POST['slim_quantity'] ?? 0));
 $roundQty = max(0, (int)($_POST['round_quantity'] ?? 0));
 $notes   = sanitize($conn, $_POST['notes'] ?? '');
 
 // Validate
-if (!$name || !$phone || !$loc || ($slimQty === 0 && $roundQty === 0)) {
+if (!$name || !$loc || ($slimQty === 0 && $roundQty === 0)) {
     echo json_encode(['error' => 'Please fill in all required fields and select at least one gallon quantity.']);
+    exit;
+}
+
+$normalizedLocation = strtolower(trim(preg_replace('/[^a-z0-9]+/i', ' ', $loc)));
+$allowedLocationPattern = '/\bpooc\b|\bmarket\s+area\b|\bbalibago\b|\bdila\b|\bdita\b|\b(?:brgy|barangay)\s+labas\b|\bmalusak\b|\b(?:sta|santa)\s+rosa\b/';
+if (!preg_match($allowedLocationPattern, $normalizedLocation)) {
+    echo json_encode(['error' => 'Sorry, we currently only deliver to selected areas in Sta. Rosa. Please enter an address within our service area.']);
+    exit;
+}
+
+if ($phone !== null && !preg_match('/^09\d{9}$/', $phone)) {
+    echo json_encode(['error' => 'Please enter a valid Philippine contact number.']);
     exit;
 }
 

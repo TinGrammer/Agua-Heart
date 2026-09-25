@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_number VARCHAR(20) NOT NULL,
     customer_name VARCHAR(100) NOT NULL,
-    contact_number VARCHAR(20) NOT NULL,
+    contact_number VARCHAR(20) NULL,
     location TEXT NOT NULL,
     gallon_type ENUM('Slim','Round') NOT NULL,
     quantity INT NOT NULL,
@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS orders (
     time_ordered TIME NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE orders MODIFY contact_number VARCHAR(20) NULL;
 
 CREATE TABLE IF NOT EXISTS admins (
     id INT AUTO_INCREMENT PRIMARY KEY,

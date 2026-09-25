@@ -1,4 +1,33 @@
 const PRICES = { Slim: 25, Round: 30 };
+const SERVICE_AREA_MESSAGE = 'Sorry, we currently only deliver to selected areas in Sta. Rosa. Please enter an address within our service area.';
+
+function isAllowedLocation(value) {
+    const normalized = value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    return /\bpooc\b|\bmarket\s+area\b|\bbalibago\b|\bdila\b|\bdita\b|\b(?:brgy|barangay)\s+labas\b|\bmalusak\b|\b(?:sta|santa)\s+rosa\b/.test(normalized);
+}
+
+function validateLocation(showMessage = true) {
+    const location = document.getElementById('location');
+    const message = document.getElementById('locationMessage');
+    const value = location.value.trim();
+    const allowed = value !== '' && isAllowedLocation(value);
+
+    if (value === '') {
+        location.classList.remove('error');
+        message.textContent = '';
+        message.classList.remove('show');
+    } else if (!allowed) {
+        location.classList.add('error');
+        message.textContent = SERVICE_AREA_MESSAGE;
+        message.classList.add('show');
+    } else {
+        location.classList.remove('error');
+        message.textContent = '';
+        message.classList.remove('show');
+    }
+
+    return allowed;
+}
 
 function getQtyValue(id) {
     const value = parseInt(document.getElementById(id).value) || 0;
@@ -44,6 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.getElementById('location').addEventListener('input', () => validateLocation());
+
     document.getElementById('orderForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
@@ -78,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function validateForm() {
     let valid = true;
-    const required = ['customer_name', 'contact_number', 'location'];
+    const required = ['customer_name', 'location'];
     required.forEach(id => {
         const el = document.getElementById(id);
         if (!el.value.trim()) {
@@ -89,6 +120,16 @@ function validateForm() {
         }
     });
 
+    const locationAllowed = validateLocation();
+    if (!locationAllowed) {
+        valid = false;
+        if (!document.getElementById('location').value.trim()) {
+            const message = document.getElementById('locationMessage');
+            message.textContent = 'Please enter a delivery address within our service area.';
+            message.classList.add('show');
+        }
+    }
+
     const slimQty = getQtyValue('slim_quantity');
     const roundQty = getQtyValue('round_quantity');
     if (slimQty === 0 && roundQty === 0) {
@@ -97,7 +138,7 @@ function validateForm() {
     }
 
     const phone = document.getElementById('contact_number').value.trim();
-    if (phone && !/^[0-9+\-\s()]{7,15}$/.test(phone)) {
+    if (phone && !/^09\d{9}$/.test(phone)) {
         document.getElementById('contact_number').classList.add('error');
         valid = false;
     }

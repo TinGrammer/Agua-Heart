@@ -101,7 +101,6 @@
             <div class="product-info">
                 <h3>Slim Gallon</h3>
                 <p>Perfect for small households or personal use. Lightweight and easy to handle.</p>
-                <div class="product-price">₱25 <small style="font-size:0.9rem;color:#6c757d;font-weight:400">/ gallon</small></div>
                 <a href="order.php" class="btn btn-blue" style="font-size:0.9rem;padding:10px 24px;">Order Slim</a>
             </div>
         </div>
@@ -112,7 +111,6 @@
             <div class="product-info">
                 <h3>Round Gallon</h3>
                 <p>Ideal for families and offices. Standard size with more water per gallon.</p>
-                <div class="product-price">₱30 <small style="font-size:0.9rem;color:#6c757d;font-weight:400">/ gallon</small></div>
                 <a href="order.php" class="btn btn-blue" style="font-size:0.9rem;padding:10px 24px;">Order Round</a>
             </div>
         </div>
@@ -166,7 +164,7 @@
         <div class="contact-card fade-in">
             <div class="contact-icon">📞</div>
             <h3>Phone</h3>
-            <p>0962-380-3815</p>
+            <p><a href="tel:09914994247">09914994247</a><br><a href="tel:09623803815">09623803815</a></p>
         </div>
         <div class="contact-card fade-in">
             <div class="contact-icon">📍</div>
