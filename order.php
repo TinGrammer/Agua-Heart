@@ -57,7 +57,19 @@
                     <div class="form-group">
                         <label for="location">Address / Location <span>*</span></label>
                         <input type="text" id="location" name="location" class="form-control"
-                               placeholder="Street, Barangay, City" autocomplete="street-address">
+                               list="allowedLocations"
+                               placeholder="Example: 123 San Jose St, Dita, Sta. Rosa or Brgy. Labas, Village Name"
+                               autocomplete="street-address">
+                        <datalist id="allowedLocations">
+                            <option value="Pooc"></option>
+                            <option value="Market Area"></option>
+                            <option value="Balibago"></option>
+                            <option value="Dila"></option>
+                            <option value="Dita"></option>
+                            <option value="Brgy / Barangay Labas"></option>
+                            <option value="Malusak"></option>
+                            <option value="Sta. Rosa / Santa Rosa"></option>
+                        </datalist>
                         <div id="locationMessage" class="location-message" role="alert"></div>
                     </div>
                 </div>

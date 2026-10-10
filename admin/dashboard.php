@@ -22,6 +22,37 @@ while ($r = $typeRes->fetch_assoc()) {
 
 // Recent orders
 $recent = $conn->query("SELECT * FROM orders ORDER BY created_at DESC LIMIT 8");
+$recentOrders = [];
+while ($row = $recent->fetch_assoc()) {
+    $key = $row['order_number'];
+    if (!isset($recentOrders[$key])) {
+        $recentOrders[$key] = [
+            'order_number' => $row['order_number'],
+            'customer_name' => $row['customer_name'],
+            'contact_number' => $row['contact_number'],
+            'location' => $row['location'],
+            'gallon_type' => $row['gallon_type'],
+            'quantity' => (int)$row['quantity'],
+            'date_ordered' => $row['date_ordered'],
+            'time_ordered' => $row['time_ordered'],
+            'payment_type' => $row['payment_type'],
+            'amount' => $row['amount'],
+        ];
+        continue;
+    }
+
+    $recentOrders[$key]['quantity'] += (int)$row['quantity'];
+    if ($recentOrders[$key]['gallon_type'] !== $row['gallon_type']) {
+        $recentOrders[$key]['gallon_type'] = 'Mixed';
+    }
+    if ($recentOrders[$key]['payment_type'] === null && $row['payment_type'] !== null) {
+        $recentOrders[$key]['payment_type'] = $row['payment_type'];
+    }
+    if ($recentOrders[$key]['amount'] === null && $row['amount'] !== null) {
+        $recentOrders[$key]['amount'] = $row['amount'];
+    }
+}
+$recentOrders = array_values($recentOrders);
 $inactiveCustomers = getInactiveCustomers($conn);
 ?>
 <!DOCTYPE html>
@@ -185,13 +216,17 @@ $inactiveCustomers = getInactiveCustomers($conn);
                                 <th>Type</th>
                                 <th>Qty</th>
                                 <th>Date</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>Payment</th>
+                                <th style="text-align:right">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <?php while ($row = $recent->fetch_assoc()): ?>
+                        <?php foreach ($recentOrders as $row): ?>
                             <?php $isInactive = isset($inactiveCustomers[$row['customer_name']]); ?>
+                            <?php $paymentType = $row['payment_type'] ?? null; ?>
+                            <?php $paymentText = $paymentType === 'paid' ? 'Paid' : ($paymentType === 'credit' ? 'Credit' : '—'); ?>
+                            <?php $paymentBadge = $paymentType === 'paid' ? 'badge-paid' : ($paymentType === 'credit' ? 'badge-credit' : 'badge-neutral'); ?>
+                            <?php $amount = $row['amount'] !== null && $row['amount'] !== '' ? (float)$row['amount'] : null; ?>
                             <tr>
                                 <td><strong><?= htmlspecialchars($row['order_number']) ?></strong></td>
                                 <td>
@@ -199,27 +234,15 @@ $inactiveCustomers = getInactiveCustomers($conn);
                                     <small style="color:#6c757d"><?= htmlspecialchars($row['contact_number']) ?></small>
                                 </td>
                                 <td><?= htmlspecialchars(substr($row['location'], 0, 30)) ?>...</td>
-                                <td><span class="badge badge-<?= strtolower($row['gallon_type']) ?>"><?= $row['gallon_type'] ?></span></td>
+                                <td><span class="badge badge-<?= strtolower($row['gallon_type']) ?>"><?= htmlspecialchars($row['gallon_type']) ?></span></td>
                                 <td><strong><?= $row['quantity'] ?></strong></td>
                                 <td><?= date('M j', strtotime($row['date_ordered'])) ?><br><small style="color:#6c757d"><?= date('g:i A', strtotime($row['time_ordered'])) ?></small></td>
                                 <td>
-                                    <span class="badge badge-<?= strtolower($row['status']) ?>">
-                                        <?= $row['status'] === 'Pending' ? '⏳' : ($row['status'] === 'Delivered' ? '✅' : '❌') ?>
-                                        <?= $row['status'] ?>
-                                    </span>
+                                    <span class="badge <?= htmlspecialchars($paymentBadge) ?>"><?= htmlspecialchars($paymentText) ?></span>
                                 </td>
-                                <td>
-                                    <div class="action-btns">
-                                        <?php if ($row['status'] === 'Pending'): ?>
-                                            <button class="btn-sm btn-success" onclick="updateStatus(<?= $row['id'] ?>,'Delivered')">✅</button>
-                                            <button class="btn-sm btn-danger" onclick="updateStatus(<?= $row['id'] ?>,'Cancelled')">❌</button>
-                                        <?php else: ?>
-                                            <span style="color:#6c757d;font-size:0.8rem">—</span>
-                                        <?php endif; ?>
-                                    </div>
-                                </td>
+                                <td class="amount-cell"><?= $amount !== null ? '₱' . number_format($amount, 2, '.', ',') : '—' ?></td>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>

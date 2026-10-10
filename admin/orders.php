@@ -139,7 +139,8 @@ $inactiveCustomers = getInactiveCustomers($conn);
                                 <th>Location</th>
                                 <th>Type</th>
                                 <th>Qty</th>
-                                <th>Amount</th>
+                                <th>Payment</th>
+                                <th style="text-align:right">Amount</th>
                                 <th>Date & Time</th>
                                 <th>Notes</th>
                                 <th>Status</th>
@@ -148,11 +149,15 @@ $inactiveCustomers = getInactiveCustomers($conn);
                         </thead>
                         <tbody>
                         <?php if ($orders->num_rows === 0): ?>
-                            <tr><td colspan="11" style="text-align:center;padding:40px;color:#6c757d">No orders found.</td></tr>
+                            <tr><td colspan="12" style="text-align:center;padding:40px;color:#6c757d">No orders found.</td></tr>
                         <?php else: ?>
                         <?php while ($row = $orders->fetch_assoc()):
                             $price = $row['gallon_type'] === 'Slim' ? PRICE_SLIM : PRICE_ROUND;
-                            $amount = $price * $row['quantity'];
+                            $itemAmount = $price * $row['quantity'];
+                            $paymentType = $row['payment_type'] ?? null;
+                            $paymentBadge = $paymentType === 'paid' ? 'badge-paid' : ($paymentType === 'credit' ? 'badge-credit' : 'badge-neutral');
+                            $paymentText = $paymentType === 'paid' ? 'Paid' : ($paymentType === 'credit' ? 'Credit' : '—');
+                            $amount = $row['amount'] !== null && $row['amount'] !== '' ? (float)$row['amount'] : $itemAmount;
                             $isInactive = isset($inactiveCustomers[$row['customer_name']]);
                         ?>
                             <tr>
@@ -164,7 +169,10 @@ $inactiveCustomers = getInactiveCustomers($conn);
                                 <td style="max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="<?= htmlspecialchars($row['location']) ?>"><?= htmlspecialchars($row['location']) ?></td>
                                 <td><span class="badge badge-<?= strtolower($row['gallon_type']) ?>"><?= $row['gallon_type'] ?></span></td>
                                 <td><strong><?= $row['quantity'] ?></strong></td>
-                                <td><strong style="color:#0077b6">₱<?= number_format($amount) ?></strong></td>
+                                <td>
+                                    <span class="badge <?= htmlspecialchars($paymentBadge) ?>"><?= htmlspecialchars($paymentText) ?></span>
+                                </td>
+                                <td class="amount-cell"><strong style="color:#0077b6">₱<?= number_format($amount, 2, '.', ',') ?></strong></td>
                                 <td>
                                     <?= date('M j, Y', strtotime($row['date_ordered'])) ?><br>
                                     <small style="color:#6c757d"><?= date('g:i A', strtotime($row['time_ordered'])) ?></small>
@@ -180,6 +188,11 @@ $inactiveCustomers = getInactiveCustomers($conn);
                                 </td>
                                 <td>
                                     <div class="action-btns">
+                                        <button type="button" class="btn-sm btn-primary payment-edit-btn"
+                                                data-order-id="<?= (int)$row['id'] ?>"
+                                                data-payment-type="<?= htmlspecialchars($paymentType ?? '') ?>"
+                                                data-amount="<?= htmlspecialchars((string)($row['amount'] !== null && $row['amount'] !== '' ? $row['amount'] : number_format($amount, 2, '.', ''))) ?>"
+                                                title="Edit payment">💳</button>
                                         <?php if ($row['status'] === 'Pending'): ?>
                                             <button class="btn-sm btn-success" onclick="updateStatus(<?= $row['id'] ?>,'Delivered')" title="Mark Delivered">✅</button>
                                             <button class="btn-sm btn-danger" onclick="updateStatus(<?= $row['id'] ?>,'Cancelled')" title="Cancel">❌</button>
@@ -215,6 +228,39 @@ $inactiveCustomers = getInactiveCustomers($conn);
     </div>
 </div>
 
+<div id="paymentModal" class="payment-modal" aria-hidden="true">
+    <div class="payment-modal-card">
+        <div class="payment-modal-header">
+            <h3>Update Payment</h3>
+            <button type="button" class="close-payment-modal" data-close-payment aria-label="Close">✕</button>
+        </div>
+
+        <form id="paymentForm">
+            <input type="hidden" id="paymentOrderId" name="order_id">
+            <div class="payment-form-grid">
+                <div class="form-group compact">
+                    <label for="paymentType">Payment Type</label>
+                    <select id="paymentType" name="payment_type" class="filter-select">
+                        <option value="">No payment info</option>
+                        <option value="paid">Paid</option>
+                        <option value="credit">Credit</option>
+                    </select>
+                </div>
+                <div class="form-group compact">
+                    <label for="paymentAmount">Amount</label>
+                    <input type="number" id="paymentAmount" name="amount" class="search-input" min="0" step="0.01" placeholder="0.00">
+                </div>
+            </div>
+
+            <div class="payment-modal-actions">
+                <button type="button" class="btn-sm btn-outline" data-close-payment>Cancel</button>
+                <button type="submit" class="btn-sm btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script src="../assets/js/dashboard.js"></script>
+<script src="../assets/js/admin-orders.js"></script>
 </body>
 </html>

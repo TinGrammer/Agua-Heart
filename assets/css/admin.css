@@ -428,8 +428,74 @@ tbody tr:last-child td { border-bottom: none; }
 .badge-cancelled { background: #ffebee; color: #c62828; }
 .badge-slim { background: #e3f2fd; color: #1565c0; }
 .badge-round { background: #f3e5f5; color: #6a1b9a; }
+.badge-paid { background: #e8f5e9; color: #2e7d32; }
+.badge-credit { background: #fff4e5; color: #b26a00; }
+.badge-neutral { background: #eef2f7; color: var(--gray); }
 
 .action-btns { display: flex; gap: 6px; }
+.amount-cell { text-align: right; font-variant-numeric: tabular-nums; }
+
+.payment-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 200;
+}
+
+.payment-modal.show { display: flex; }
+
+.payment-modal-card {
+    background: white;
+    border-radius: 16px;
+    width: min(460px, 100%);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+    padding: 24px;
+}
+
+.payment-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.payment-modal-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.close-payment-modal {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--gray);
+}
+
+.payment-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.form-group.compact { margin-bottom: 0; }
+
+.payment-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+@media (max-width: 560px) {
+    .payment-form-grid { grid-template-columns: 1fr; }
+}
 
 .pagination {
     display: flex;

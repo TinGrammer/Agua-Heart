@@ -73,7 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.getElementById('location').addEventListener('input', () => validateLocation());
+    const locationField = document.getElementById('location');
+    ['input', 'change'].forEach(eventName => {
+        locationField.addEventListener(eventName, () => validateLocation());
+    });
 
     document.getElementById('orderForm').addEventListener('submit', async (e) => {
         e.preventDefault();
