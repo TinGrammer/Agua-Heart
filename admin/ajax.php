@@ -37,9 +37,20 @@ if ($action === 'update_payment') {
         exit;
     }
 
+    $orderStmt = $conn->prepare("SELECT order_number FROM orders WHERE id = ?");
+    $orderStmt->bind_param('i', $id);
+    $orderStmt->execute();
+    $order = $orderStmt->get_result()->fetch_assoc();
+    $orderStmt->close();
+
+    if (!$order) {
+        echo json_encode(['error' => 'Invalid order selected.']);
+        exit;
+    }
+
     if ($paymentType === '') {
-        $stmt = $conn->prepare("UPDATE orders SET payment_type = NULL, amount = NULL WHERE id = ?");
-        $stmt->bind_param('i', $id);
+        $stmt = $conn->prepare("UPDATE orders SET payment_type = NULL, amount = CASE WHEN id = ? THEN NULL ELSE amount END WHERE order_number = ?");
+        $stmt->bind_param('is', $id, $order['order_number']);
 
         if ($stmt->execute()) {
             echo json_encode(['success' => true]);
@@ -62,8 +73,8 @@ if ($action === 'update_payment') {
     $amount = (float)$amountRaw;
     $amount = round($amount, 2);
 
-    $stmt = $conn->prepare("UPDATE orders SET payment_type = ?, amount = ? WHERE id = ?");
-    $stmt->bind_param('sdi', $paymentType, $amount, $id);
+    $stmt = $conn->prepare("UPDATE orders SET payment_type = ?, amount = CASE WHEN id = ? THEN ? ELSE amount END WHERE order_number = ?");
+    $stmt->bind_param('sids', $paymentType, $id, $amount, $order['order_number']);
 
     if ($stmt->execute()) {
         echo json_encode(['success' => true]);
